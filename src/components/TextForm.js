@@ -31,6 +31,9 @@ const TextForm = (props) => {
         text.select()
         navigator.clipboard.writeText(text.value)
         props.showAlert("text is copied to clipboard", "success")
+        setTimeout(()=>{
+            document.getSelection().removeAllRanges()
+        }, 250)
     };
 
     const handleRemoveExtraSpaces = () => {
@@ -47,24 +50,24 @@ const TextForm = (props) => {
 
                     <textarea className="form-control"
                         style={{
-                            backgroundColor: props.mode === 'light' ? 'white' : 'grey',
+                            backgroundColor: props.mode === 'light' ? 'white' : '#13466e',
                             color: props.mode === 'light' ? '#042743' : 'white'
                         }}
                         id="myBox" rows={8} value={text} onChange={handleOnChange}
                     />
                 </div>
-                <button className="btn btn-primary mx-2" onClick={handleUpClick}>Convert to upper case</button>
-                <button className="btn btn-primary mx-2" onClick={handleLoClick}>Convert to lower case</button>
-                <button className="btn btn-primary mx-2" onClick={handleClearText}>Clear Text</button>
-                <button className="btn btn-primary mx-2" onClick={handleCopy}>Copy Text</button>
-                <button className="btn btn-primary mx-2" onClick={handleRemoveExtraSpaces}>Remove Extra Spaces</button>
+                <button disabled={text.length === 0} className="btn btn-primary mx-2 my=1" onClick={handleUpClick}>CONVERT TO UPPER CASE</button>
+                <button disabled={text.length === 0} className="btn btn-secondary mx-2 my=1" onClick={handleLoClick}>Convert to lower case</button>
+                <button disabled={text.length === 0} className="btn btn-warning mx-2 my=1" onClick={handleRemoveExtraSpaces}>Remove Extra Spaces</button>
+                <button disabled={text.length === 0} className="btn btn-success mx-2 my=1" onClick={handleCopy}>Copy Text</button>
+                <button disabled={text.length === 0} className="btn btn-danger mx-2 my=1" onClick={handleClearText}>Clear Text</button>
             </div>
             <div className="container my-3" style={{ color: props.mode === 'light' ? '#042743' : 'white' }} >
                 <h1>Your text Summary </h1>
-                <p>{text.trim() === '' ? 0 : text.match(/\S+/g).length} words and {text.replace(/\s+/g, '').length} characters</p>
-                <p>{0.008 * text.split(" ").length} minutes to read</p>
+                <p>{text.split(" ").filter((element)=>{return element.length!==0}).length} words and {text.length} characters</p>
+                <p>{0.008 * text.split(" ").filter((element) => { return element.length !== 0 }).length} minutes to read</p>
                 <h2>Preview</h2>
-                <p>{text.trim() === '' ? 0 : text.match(/\S+/g).length} words and {text.replace(/\s+/g, '').length} characters</p>
+                <p>{text.length>0 ? text : "Nothing to Preview"} </p>
             </div>
         </>
     )
